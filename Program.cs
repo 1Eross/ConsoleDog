@@ -32,22 +32,22 @@ public class Cell
 }
 public class Map
 {
-    public static readonly int _MapHeight = 30; // Изменяемое
-    public static readonly int _MapWidth = 30; // Изменяемое
+    public static readonly int _MapHeight = 80; // Изменяемое
+    public static readonly int _MapWidth = 35; // Изменяемое
     public Cell[,] _Cells = new Cell[_MapHeight, _MapWidth];
     public Map()
     {
-        for (int i = 0; i < _MapWidth; i++)
+        for (int i = 0; i < _MapHeight; i++)
         {
-            for (int j = 0; j < _MapHeight; j++)
+            for (int j = 0; j < _MapWidth; j++)
             {
-                if (i == 0 || j == 0 || j == _MapHeight - 1 || i == _MapWidth - 1)
+                if (i == 0 || j == 0 || j == _MapWidth - 1 || i == _MapHeight - 1)
                 {
                     this._Cells[i, j] = new Cell(i, j, false, ' ');
                 }
                 else
                 {
-                    if (i == 1 || j == 1 || j == _MapHeight - 2 || i == _MapWidth - 2)
+                    if (i == 1 || j == 1 || j == _MapWidth - 2 || i == _MapHeight - 2)
                     {
                         this._Cells[i, j] = new Cell(i, j, false, '#');
                     }
@@ -96,7 +96,7 @@ public class Program
     {
 
         string fontFileName = "ascii_8x8.png";
-        string ConsoleTitle = "ABOBA";
+        string ConsoleTitle = "ConsoleDog";
         _RootConsole = new RLRootConsole(fontFileName, _RootConsoleWidth, _RootConsoleHeight, 8, 8, 2f, ConsoleTitle);
         _MapConsole = new RLConsole(_RootConsoleWidth, _RootConsoleHeight);
         _StatsConsole = new RLConsole(_StatsConsoleWidth, _StatsConsoleHeight);
@@ -115,29 +115,29 @@ public class Program
             switch (keyPress.Key)
             {
                 case RLKey.Up:
-                    if (OurMap._Cells[x, y--]._IsWalkable == true)
+                    if (OurMap._Cells[x, y-1]._IsWalkable == true)
                     {
-                        Hero._PersonY--;
+                        --Hero._PersonY;
                     }
                     break;
 
                 case RLKey.Down:
-                    if (OurMap._Cells[x, y++]._IsWalkable == true)
+                    if (OurMap._Cells[x, y+1]._IsWalkable == true)
                     {
-                        Hero._PersonY++;
+                        ++Hero._PersonY;
                     }
                     break;
 
                 case RLKey.Left:
-                    if (OurMap._Cells[x--,y]._IsWalkable == true)
+                    if (OurMap._Cells[x-1,y]._IsWalkable == true)
                     {
-                        Hero._PersonX--;
+                        --Hero._PersonX;
                     }
                     break;
                 case RLKey.Right:
-                    if (OurMap._Cells[x++,y]._IsWalkable == true)
+                    if (OurMap._Cells[x+1,y]._IsWalkable == true)
                     {
-                        Hero._PersonX++;
+                        ++Hero._PersonX;
                     }
                     break;
             }
@@ -146,25 +146,32 @@ public class Program
     static void OnRootConsoleRender(object sender, EventArgs e) //Прорисовка
     {
         _RootConsole.Clear();
-        _MapConsole.SetBackColor(0, 0, _MapConsoleWidth, _MapConsoleHeight, RLColor.Green);
-        for (int i = 0; i < OurMap.Get_Map_Width(); i++)
+        _MapConsole.SetBackColor(0, 0, _MapConsoleWidth, _MapConsoleHeight, RLColor.Black);
+        for (int i = 0; i < OurMap.Get_Map_Height(); i++)
         {
-            for (int j = 0; j < OurMap.Get_Map_Height(); j++)
+            for (int j = 0; j < OurMap.Get_Map_Width(); j++)
             {
-                _MapConsole.Set(i, j, RLColor.White, RLColor.Red, OurMap.Get_CellIcon(i, j));
+                if (OurMap._Cells[i, j]._IsWalkable == true)
+                {
+                    _MapConsole.Set(i, j, RLColor.Gray, null, OurMap.Get_CellIcon(i, j));
+                }
+                else
+                {
+                    _MapConsole.Set(i, j, RLColor.White, null, OurMap.Get_CellIcon(i, j));
+                }
             }
         }
         _MapConsole.Set(Hero._PersonX, Hero._PersonY, RLColor.White, null, Hero.Icon);
-        _MapConsole.Print(22, 22, $"({Hero._PersonX};{Hero._PersonY})", RLColor.White);
         RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
 
         RLConsole.Blit(_StatsConsole, 0, 0, _StatsConsoleWidth, _StatsConsoleHeight, _RootConsole, 0, _MapConsoleHeight);
         _StatsConsole.SetBackColor(0, 0, _StatsConsoleWidth, _StatsConsoleHeight, RLColor.Brown);
-        _StatsConsole.Print(0, 0, "STATS", RLColor.White);
+        _StatsConsole.Print(3, 1, "STATS", RLColor.White);
 
         RLConsole.Blit(_MessagesConsole, 0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, _RootConsole, _StatsConsoleWidth, _MapConsoleHeight);
         _MessagesConsole.SetBackColor(0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, RLColor.Blue);
-        _MessagesConsole.Print(0, 0, "MESSAGES", RLColor.White);
+        _MessagesConsole.Print(1, 1, "MESSAGES", RLColor.White);
+        _MessagesConsole.Print(1, 3, $"({Hero._PersonX};{Hero._PersonY})", RLColor.White);
 
         _RootConsole.Draw();
     }
