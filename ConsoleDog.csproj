@@ -52,7 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\RectangleMap.cs" />
+    <Compile Include="Console\Console.cs" />
+    <Compile Include="Map\Map.cs" />
     <Compile Include="Person\Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
