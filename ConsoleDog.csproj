@@ -53,7 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Map\RectangleMap.cs" />
+    <Compile Include="Person\Enemy.cs" />
+    <Compile Include="Person\Logic_Enemies.cs" />
     <Compile Include="Person\Person.cs" />
+    <Compile Include="Person\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

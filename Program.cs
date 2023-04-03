@@ -9,7 +9,7 @@ using ConsoleDog.Person;
 public class Program
 {
     private static ConsoleDogMap OurMap = new ConsoleDogMap();
-    private static Person Hero = new Person(10,10);
+    private static Player Hero = new Player("Evgeny",0,100,1,1,0,0,10,10,'@');
     private static RLConsole _MapConsole;
     static readonly int _MapConsoleWidth = 80;
     static readonly int _MapConsoleHeight = 35;
@@ -40,34 +40,34 @@ public class Program
         RLKeyPress keyPress = _RootConsole.Keyboard.GetKeyPress();
         if (keyPress != null)
         {
-            int x = Hero._PersonX;
-            int y = Hero._PersonY;
+            int x = Hero._PlayerX;
+            int y = Hero._PlayerY;
             switch (keyPress.Key)
             {
                 case RLKey.Up:
                     if (OurMap._Cells[x, y-1]._IsWalkable == true)
                     {
-                        --Hero._PersonY;
+                        --Hero._PlayerY;
                     }
                     break;
 
                 case RLKey.Down:
                     if (OurMap._Cells[x, y+1]._IsWalkable == true)
                     {
-                        ++Hero._PersonY;
+                        ++Hero._PlayerY;
                     }
                     break;
 
                 case RLKey.Left:
                     if (OurMap._Cells[x-1,y]._IsWalkable == true)
                     {
-                        --Hero._PersonX;
+                        --Hero._PlayerX;
                     }
                     break;
                 case RLKey.Right:
                     if (OurMap._Cells[x+1,y]._IsWalkable == true)
                     {
-                        ++Hero._PersonX;
+                        ++Hero._PlayerX;
                     }
                     break;
             }
@@ -92,7 +92,7 @@ public class Program
                 }
             }
         }
-        _MapConsole.Set(Hero._PersonX, Hero._PersonY, RLColor.White, null, Hero.Icon);
+        _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
         RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
 
         RLConsole.Blit(_StatsConsole, 0, 0, _StatsConsoleWidth, _StatsConsoleHeight, _RootConsole, 0, _MapConsoleHeight);
@@ -102,7 +102,7 @@ public class Program
         RLConsole.Blit(_MessagesConsole, 0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, _RootConsole, _StatsConsoleWidth, _MapConsoleHeight);
         _MessagesConsole.SetBackColor(0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, RLColor.Blue);
         _MessagesConsole.Print(1, 1, "MESSAGES", RLColor.White);
-        _MessagesConsole.Print(1, 3, $"({Hero._PersonX};{Hero._PersonY})", RLColor.White);
+        _MessagesConsole.Print(1, 3, $"({Hero._PlayerX};{Hero._PlayerY})", RLColor.White);
 
 
         _RootConsole.Draw();
