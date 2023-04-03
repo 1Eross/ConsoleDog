@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleDog.Person
+namespace ConsoleDog.HaracterandPersons
 {
     public class Person
     {

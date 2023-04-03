@@ -1,18 +1,16 @@
 ﻿using OpenTK.Platform.Windows;
 using RLNET;
 using System;
+using ConsoleDog.HaracterandPersons;
 using ConsoleDog.Map;
-using ConsoleDog.Person;
-
 
 
 public class Program
 {
-    private static ConsoleDogMap OurMap = new ConsoleDogMap();
-    private static Player Hero = new Player("Evgeny",0,100,1,1,0,0,10,10,'@');
+    private static Person Hero = new Person(4,4);
     private static RLConsole _MapConsole;
-    static readonly int _MapConsoleWidth = 80;
-    static readonly int _MapConsoleHeight = 35;
+    static readonly int _MapConsoleWidth = ConsoleDogMap._MapWidth;
+    static readonly int _MapConsoleHeight = ConsoleDogMap._MapHeight;
     private static RLConsole _StatsConsole;
     private static readonly int _StatsConsoleWidth = 13;
     private static readonly int _StatsConsoleHeight = 13;
@@ -22,9 +20,11 @@ public class Program
     private static RLRootConsole _RootConsole;
     static readonly int _RootConsoleWidth = _MapConsoleWidth;
     static readonly int _RootConsoleHeight = _MapConsoleHeight + _StatsConsoleHeight;
-    public static void Main()
+    
+    public static void Main(string[] args)
     {
-
+        Random Rand = new Random();
+        ConsoleDogMap.MapCreation(Rand);
         string fontFileName = "ascii_8x8.png";
         string ConsoleTitle = "ConsoleDog";
         _RootConsole = new RLRootConsole(fontFileName, _RootConsoleWidth, _RootConsoleHeight, 8, 8, 2f, ConsoleTitle);
@@ -45,27 +45,27 @@ public class Program
             switch (keyPress.Key)
             {
                 case RLKey.Up:
-                    if (OurMap._Cells[x, y-1]._IsWalkable == true)
+                    if (ConsoleDogMap._Cells[y - 1, x]._IsWalkable == true)
                     {
                         --Hero._PlayerY;
                     }
                     break;
 
                 case RLKey.Down:
-                    if (OurMap._Cells[x, y+1]._IsWalkable == true)
+                    if (ConsoleDogMap._Cells[y + 1, x]._IsWalkable == true)
                     {
                         ++Hero._PlayerY;
                     }
                     break;
 
                 case RLKey.Left:
-                    if (OurMap._Cells[x-1,y]._IsWalkable == true)
+                    if (ConsoleDogMap._Cells[y, x - 1]._IsWalkable == true)
                     {
                         --Hero._PlayerX;
                     }
                     break;
                 case RLKey.Right:
-                    if (OurMap._Cells[x+1,y]._IsWalkable == true)
+                    if (ConsoleDogMap._Cells[y, x + 1]._IsWalkable == true)
                     {
                         ++Hero._PlayerX;
                     }
@@ -78,21 +78,26 @@ public class Program
         _RootConsole.Clear();
         _MapConsole.SetBackColor(0, 0, _MapConsoleWidth, _MapConsoleHeight, RLColor.Black);
         
-        for (int i = 0; i < OurMap.Get_Map_Height(); i++)
+        for (int y = 0; y < ConsoleDogMap._MapHeight; y++)
         {
-            for (int j = 0; j < OurMap.Get_Map_Width(); j++)
+            for (int x = 0; x < ConsoleDogMap._MapWidth; x++)
             {
-                if (OurMap._Cells[i, j]._IsWalkable == true)
+                if (ConsoleDogMap._Cells[y, x]._IsMap == true)
                 {
-                    _MapConsole.Set(i, j, RLColor.Gray, null, OurMap.Get_CellIcon(i, j));
+                    if (ConsoleDogMap._Cells[y, x]._IsWalkable == true)
+                    {
+                        _MapConsole.Set(x, y, RLColor.Gray, null, '.');
+                    }
+                    else
+                    {
+                        _MapConsole.Set(x, y, RLColor.White, null, '#'); // Отрисовка карты
+                    }
                 }
-                else
-                {
-                    _MapConsole.Set(i, j, RLColor.White, null, OurMap.Get_CellIcon(i, j));
-                }
+
             }
         }
-        _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
+        _MapConsole.Set(Hero._PersonX, Hero._PersonY, RLColor.White, null, Hero.Icon);
+
         RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
 
         RLConsole.Blit(_StatsConsole, 0, 0, _StatsConsoleWidth, _StatsConsoleHeight, _RootConsole, 0, _MapConsoleHeight);
