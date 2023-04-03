@@ -23,9 +23,8 @@ public class Program
     
     public static void Main(string[] args)
     {
-        ConsoleDogMap.MapCreation();
-        ConsoleDogMap.RectangleCreate(35, 85, 0, 0);
-        ConsoleDogMap.RectangleCreate(10, 10, 10, 10);
+        Random Rand = new Random();
+        ConsoleDogMap.MapCreation(Rand);
         string fontFileName = "ascii_8x8.png";
         string ConsoleTitle = "ConsoleDog";
         _RootConsole = new RLRootConsole(fontFileName, _RootConsoleWidth, _RootConsoleHeight, 8, 8, 2f, ConsoleTitle);
