@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Console\Console.cs" />
     <Compile Include="Map\Map.cs" />
+    <Compile Include="MessageLog\MessageLog.cs" />
     <Compile Include="Person\Person.cs" />
     <Compile Include="Person\Player.cs" />
     <Compile Include="Program.cs" />
