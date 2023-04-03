@@ -40,34 +40,34 @@ public class Program
         RLKeyPress keyPress = _RootConsole.Keyboard.GetKeyPress();
         if (keyPress != null)
         {
-            int x = Hero._PersonX;
-            int y = Hero._PersonY;
+            int x = Hero._PlayerX;
+            int y = Hero._PlayerY;
             switch (keyPress.Key)
             {
                 case RLKey.Up:
                     if (ConsoleDogMap._Cells[y - 1, x]._IsWalkable == true)
                     {
-                        --Hero._PersonY;
+                        --Hero._PlayerY;
                     }
                     break;
 
                 case RLKey.Down:
                     if (ConsoleDogMap._Cells[y + 1, x]._IsWalkable == true)
                     {
-                        ++Hero._PersonY;
+                        ++Hero._PlayerY;
                     }
                     break;
 
                 case RLKey.Left:
                     if (ConsoleDogMap._Cells[y, x - 1]._IsWalkable == true)
                     {
-                        --Hero._PersonX;
+                        --Hero._PlayerX;
                     }
                     break;
                 case RLKey.Right:
                     if (ConsoleDogMap._Cells[y, x + 1]._IsWalkable == true)
                     {
-                        ++Hero._PersonX;
+                        ++Hero._PlayerX;
                     }
                     break;
             }
@@ -96,8 +96,8 @@ public class Program
 
             }
         }
-
         _MapConsole.Set(Hero._PersonX, Hero._PersonY, RLColor.White, null, Hero.Icon);
+
         RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
 
         RLConsole.Blit(_StatsConsole, 0, 0, _StatsConsoleWidth, _StatsConsoleHeight, _RootConsole, 0, _MapConsoleHeight);
@@ -107,7 +107,7 @@ public class Program
         RLConsole.Blit(_MessagesConsole, 0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, _RootConsole, _StatsConsoleWidth, _MapConsoleHeight);
         _MessagesConsole.SetBackColor(0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, RLColor.Blue);
         _MessagesConsole.Print(1, 1, "MESSAGES", RLColor.White);
-        _MessagesConsole.Print(1, 3, $"({Hero._PersonX};{Hero._PersonY})", RLColor.White);
+        _MessagesConsole.Print(1, 3, $"({Hero._PlayerX};{Hero._PlayerY})", RLColor.White);
 
 
         _RootConsole.Draw();

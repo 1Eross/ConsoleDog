@@ -6,15 +6,37 @@ using System.Threading.Tasks;
 
 namespace ConsoleDog.HaracterandPersons
 {
-    internal class Person
+    public class Person
     {
-        public char Icon = '@';
-        public int _PersonX;
-        public int _PersonY;
-        public Person(int personX, int personY)
+        public string Name { get; set; }
+        public char Icon { get; set; }
+        public int Level { get; set; }
+        public int Health { get; set; }
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+
+        public Person(string name, int level, int health, int attack, int defense, char icon)
         {
-            this._PersonX = personX;
-            this._PersonY = personY;
+            Name = name;//имя
+            Icon = icon; //отображение на карте
+            Level = level;//уровень
+            Health = health;//здоровье
+            Attack = attack;//атака
+            Defense = defense;//защита
+        }
+
+        public void Damage(int damage)//урон
+        {
+            Health -= damage;
+            if (Health < 0)
+            {
+                Health = 0;
+            }
+        }
+
+        public bool Dead()//смерть
+        {
+            return Health <= 0;
         }
     }
 }
