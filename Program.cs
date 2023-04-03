@@ -5,10 +5,12 @@ using System;
 using ConsoleDog.Map;
 //using ConsoleDog.PlayerAndPerson;
 using ConsoleDog.Person;
+using System.Reflection.Emit;
 
 public class Program
 {
-    private static Player Hero = new Player(null, 1, 1, 1, 1, 1, 1, 4, 4, '@');
+    private static Player Hero = new Player("Evgeny", 1, 1, 1, 1, 1, 1, 4, 4, '@');
+    static Enemy enemy = Logic_Enemies.CreateEnemy(1);
     private static RLConsole _MapConsole;
     static readonly int _MapConsoleWidth = ConsoleDogMap._MapWidth;
     static readonly int _MapConsoleHeight = ConsoleDogMap._MapHeight;
@@ -97,7 +99,11 @@ public class Program
 
             }
         }
-        _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
+       _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
+        _MapConsole.Set(enemy._PlayerX, enemy._PlayerY, RLColor.White, null, enemy.Icon);
+
+
+
 
         RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
 
@@ -109,6 +115,8 @@ public class Program
         _MessagesConsole.SetBackColor(0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, RLColor.Blue);
         _MessagesConsole.Print(1, 1, "MESSAGES", RLColor.White);
         _MessagesConsole.Print(1, 3, $"({Hero._PlayerX};{Hero._PlayerY})", RLColor.White);
+    
+
 
 
         _RootConsole.Draw();

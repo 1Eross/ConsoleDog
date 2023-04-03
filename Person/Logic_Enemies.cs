@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleDog.Map;
 
 namespace ConsoleDog.Person
 {
-    public static class Logic_Enemies
+    public class Logic_Enemies
     {
         private static Random random = new Random();
 
@@ -19,15 +20,17 @@ namespace ConsoleDog.Person
             int defense = random.Next(5, 10) + (level - 1) * 3;
             int experience = level * 10;
             int gold = random.Next(5, 20) + level * 3;
-            return new Enemy(name, level, health, attack, defense, experience, gold, icon);
+            int EnemyX = random.Next(0, 80);
+            int EnemyY = random.Next(0, 35);
+            return new Enemy(name, level, health, attack, defense, experience, gold, EnemyX, EnemyY, icon);
         }
 
-        private static string GenerateName()//случайная генерация имён
+        public static string GenerateName()//случайная генерация имён
         {
             string[] names = { "Goblin", "Orc", "Troll", "Skeleton", "Zombie", "Wraith" };//массив имён
             return names[random.Next(0, names.Length)];
         }
-        private static char GenerateIcon()//случайная генерация иконок
+        public static char GenerateIcon()//случайная генерация иконок
         {
             char[] icon = { 'G', 'O', 'T', 'S', 'Z', 'W' };//массив символов отображения врагов
             return icon[random.Next(0, icon.Length)];

@@ -14,10 +14,8 @@ namespace ConsoleDog.Person
         public int Experience { get; set; }
         public int Gold { get; private set; }
 
-        public int _PlayerX;
-        public int _PlayerY;
 
-        public Player(string name, int level, int health, int attack, int defense, int experience, int gold, int playerX, int playerY, char icon) : base(name, level, health, attack, defense, icon)
+        public Player(string name, int level, int health, int attack, int defense, int experience, int gold, int playerX, int playerY, char icon) : base(name, level, health, attack, defense, playerX, playerY, icon)
         {
             Experience = experience;
             icon = '@';

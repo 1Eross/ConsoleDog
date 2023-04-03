@@ -14,8 +14,10 @@ namespace ConsoleDog.Person
         public int Health { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
+        public int _PlayerX { get; set; }
+        public int _PlayerY { get; set; }
 
-        public Person(string name, int level, int health, int attack, int defense, char icon)
+        public Person(string name, int level, int health, int attack, int defense, int playerX, int playerY, char icon)
         {
             Name = name;//имя
             Icon = icon; //отображение на карте
@@ -23,6 +25,8 @@ namespace ConsoleDog.Person
             Health = health;//здоровье
             Attack = attack;//атака
             Defense = defense;//защита
+            _PlayerX = playerX;
+            _PlayerY = playerY;
         }
 
         public void Damage(int damage)//урон
