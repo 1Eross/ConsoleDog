@@ -20,9 +20,17 @@ public class Program
     private static RLRootConsole _RootConsole;
     static readonly int _RootConsoleWidth = _MapConsoleWidth;
     static readonly int _RootConsoleHeight = _MapConsoleHeight + _StatsConsoleHeight;
-    
+    // Temporary variable just to show our MessageLog is working
+    private static int _steps = 0;
+    public static MessageLog MessageLog { get; private set; }
+
     public static void Main(string[] args)
     {
+        // Create a new MessageLog and print the random seed used to generate the level
+        MessageLog = new MessageLog();
+        MessageLog.Add("The rogue arrives on level 1");
+        MessageLog.Add($"Level created with seed '{seed}'");
+        
         Random Rand = new Random();
         ConsoleDogMap.MapCreation(Rand);
         string fontFileName = "ascii_8x8.png";
@@ -72,7 +80,13 @@ public class Program
                     break;
             }
         }
-    }
+        if (didPlayerAct)
+        {
+            MessageLog.Add($"Step # {++_steps}");
+            _renderRequired = true;
+        }
+    
+}
     static void OnRootConsoleRender(object sender, EventArgs e) //Прорисовка
     {
         _RootConsole.Clear();
@@ -98,18 +112,7 @@ public class Program
         }
         _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
 
-        RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
-
-        RLConsole.Blit(_StatsConsole, 0, 0, _StatsConsoleWidth, _StatsConsoleHeight, _RootConsole, 0, _MapConsoleHeight);
-        _StatsConsole.SetBackColor(0, 0, _StatsConsoleWidth, _StatsConsoleHeight, RLColor.Brown);
-        _StatsConsole.Print(3, 1, "STATS", RLColor.White);
-
-        RLConsole.Blit(_MessagesConsole, 0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, _RootConsole, _StatsConsoleWidth, _MapConsoleHeight);
-        _MessagesConsole.SetBackColor(0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, RLColor.Blue);
-        _MessagesConsole.Print(1, 1, "MESSAGES", RLColor.White);
-        _MessagesConsole.Print(1, 3, $"({Hero._PlayerX};{Hero._PlayerY})", RLColor.White);
-
-
         _RootConsole.Draw();
+        MessageLog.Draw(_messageConsole);
     }
 }
