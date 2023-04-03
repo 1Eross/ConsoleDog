@@ -3,11 +3,11 @@ using RLNET;
 using System;
 using ConsoleDog.HaracterandPersons;
 using ConsoleDog.Map;
-
+using ConsoleDog.PlayerAndPerson;
 
 public class Program
 {
-    private static Person Hero = new Person(4,4);
+    private static Player Hero = new Player(null, 1, 1, 1, 1, 1, 1, 4, 4, '@');
     private static RLConsole _MapConsole;
     static readonly int _MapConsoleWidth = ConsoleDogMap._MapWidth;
     static readonly int _MapConsoleHeight = ConsoleDogMap._MapHeight;
@@ -96,7 +96,7 @@ public class Program
 
             }
         }
-        _MapConsole.Set(Hero._PersonX, Hero._PersonY, RLColor.White, null, Hero.Icon);
+        _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
 
         RLConsole.Blit(_MapConsole, 0, 0, _MapConsoleWidth, _MapConsoleHeight, _RootConsole, 0, 0);
 

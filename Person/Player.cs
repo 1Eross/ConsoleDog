@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ConsoleDog.Person
+namespace ConsoleDog.PlayerAndPerson
 {
-    public class Player : Person
+    public class Player : HaracterandPersons.Person
     {
         public int Experience { get; set; }
         public int Gold { get; private set; }
@@ -26,7 +26,7 @@ namespace ConsoleDog.Person
             this._PlayerY = playerY;
         }
 
-        public void AttackEnemy(Enemy enemy)
+      /*  public void AttackEnemy(Enemy enemy)
         {
             int damage = Attack - enemy.Defense;
             if (damage > 0)
@@ -74,6 +74,6 @@ namespace ConsoleDog.Person
         {
             Gold -= gold;
             Console.WriteLine($"{Name} spent {gold} gold.");
-        }
+        }*/
     }
 }

@@ -353,9 +353,6 @@ namespace ConsoleDog.Map
                         ConsoleDogMap._Cells[y, x]._IsMap = true;
                         ConsoleDogMap._Cells[y, x]._IsWalkable = true;
                     } 
-                    /*else if(y == _RectanglePlacementY || x == _RectanglePlacementX){
-                        ConsoleDogMap._Cells[y,x]._IsWalkable= true;*//*
-                    }*/
                     else
                     {
                         ConsoleDogMap._Cells[y, x]._IsMap = true;
