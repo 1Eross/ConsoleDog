@@ -15,7 +15,7 @@ namespace DungeonSlayer.Units.Players.Inventory.Armores
         {
 
            
-            Gameee.player.inventory.AddItem(Gameee.player.inventory.activeArmor);
+            Gameee.playerrr.inventory.AddItem(Gameee.playerrr.inventory.activeArmor);
         }
 
 /*        public override string GetInfo()
