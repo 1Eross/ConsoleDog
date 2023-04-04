@@ -2,7 +2,7 @@
 
 namespace DungeonSlayer.Units
 {
-    class Unit
+    class Unittt
     {
         protected char form;
         protected ConsoleColor color = ConsoleColor.White;
