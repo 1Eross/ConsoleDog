@@ -9,7 +9,7 @@ namespace DungeonSlayer
     static class Gameee
     {
         static public int currentDungeonLevel = 0, maxDungeonLevel = 0;
-        static public Playerrr player;
+        static public Playerrr playerrr;
 
         static public char[,] consoleBuffer;
     }
