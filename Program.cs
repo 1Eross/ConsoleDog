@@ -99,7 +99,7 @@ public class Program
 
             }
         }
-       _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
+        _MapConsole.Set(Hero._PlayerX, Hero._PlayerY, RLColor.White, null, Hero.Icon);
         _MapConsole.Set(enemy._PlayerX, enemy._PlayerY, RLColor.White, null, enemy.Icon);
 
 
@@ -115,10 +115,6 @@ public class Program
         _MessagesConsole.SetBackColor(0, 0, _MessagesConsoleWidth, _MessagesConsoleHeight, RLColor.Blue);
         _MessagesConsole.Print(1, 1, "MESSAGES", RLColor.White);
         _MessagesConsole.Print(1, 3, $"({Hero._PlayerX};{Hero._PlayerY})", RLColor.White);
-    
-
-
-
         _RootConsole.Draw();
     }
 }

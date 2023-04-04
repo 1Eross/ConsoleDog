@@ -25,13 +25,30 @@ namespace ConsoleDog.Map
 
         }
     }
-    public class Rectangle
+    public class Room
     {
         public int _RectangleX;
         public int _RectangleY;
         public int _RectangleHeight;
         public int _RectangleWidth;
-        public Rectangle(int rectangleX, int rectangleY, int rectangleHeight, int rectangleWidth)
+        public Room(int rectangleX, int rectangleY, int rectangleHeight, int rectangleWidth)
+        {
+            this._RectangleX = rectangleX;
+            this._RectangleY = rectangleY;
+            this._RectangleHeight = rectangleHeight;
+            this._RectangleWidth = rectangleWidth;
+        }
+    }
+
+    public class Hall
+    {
+        public int _RectangleX;
+        public int _RectangleY;
+        public int _RectangleHeight;
+        public int _RectangleWidth;
+        public int _HallEnterX;
+        public int _HallEnterY;
+        public Hall(int rectangleX, int rectangleY, int rectangleHeight, int rectangleWidth)
         {
             this._RectangleX = rectangleX;
             this._RectangleY = rectangleY;
@@ -50,8 +67,8 @@ namespace ConsoleDog.Map
         public int _LeafWidth;
         public Leaf _LeafLeftChild;
         public Leaf _LeafRightChild;
-        public Rectangle _LeafRoom;
-        public List<Rectangle> _Halls;
+        public Room _LeafRoom;
+        public List<Hall> _Halls;
         Random _Rand = new Random();
 
         public Leaf(int _LeafX, int _LeafY, int _LeafHeight, int _LeafWidth, Random Rand)
@@ -98,7 +115,7 @@ namespace ConsoleDog.Map
                 return true;
             }
         }
-        public Rectangle GetRoom(Random Rand)
+        public Room GetRoom(Random Rand)
         {
             if (_LeafRoom != null)
             {
@@ -106,8 +123,8 @@ namespace ConsoleDog.Map
             }
             else
             {
-                Rectangle LeftRoom = null;
-                Rectangle RightRoom = null;
+                Room LeftRoom = null;
+                Room RightRoom = null;
                 if (_LeafLeftChild != null)
                 {
                     LeftRoom = _LeafLeftChild.GetRoom(Rand);
@@ -138,9 +155,9 @@ namespace ConsoleDog.Map
                 }
             }
         }
-        public void CreateHall(Rectangle Left, Rectangle Right, Random Rand)
+        public void CreateHall(Room Left, Room Right, Random Rand)
         {
-            _Halls = new List<Rectangle>();
+            _Halls = new List<Hall>();
             int RoomPoint1X = Rand.Next(Left._RectangleX + 1, Left._RectangleX + Left._RectangleWidth - 2); // {?
             int RoomPoint1Y = Rand.Next(Left._RectangleY + 1, Left._RectangleY + Left._RectangleHeight - 2);
             int RoomPoint2X = Rand.Next(Right._RectangleX + 1, Right._RectangleX + Right._RectangleWidth - 2);
@@ -153,31 +170,31 @@ namespace ConsoleDog.Map
                 {
                     if (Rand.NextDouble() > 0.5)
                     {
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
                     }
                     else
                     {
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
                     }
                 }
                 else if (HallHeight > 0)
                 {
                     if (Rand.NextDouble() > 0.5)
                     {
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
                     }
                     else
                     {
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
                     }
                 }
                 else
                 {
-                    _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
+                    _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
                 }
             }
             else if (HallWidth > 0)
@@ -186,42 +203,42 @@ namespace ConsoleDog.Map
                 {
                     if (Rand.NextDouble() > 0.5)
                     {
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
                     }
                     else
                     {
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
                     }
                 }
                 else if (HallHeight > 0)
                 {
                     if (Rand.NextDouble() > 0.5)
                     {
-                        _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
                     }
                     else
                     {
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
+                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
                     }
                 }
                 else
                 {
-                    _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
+                    _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
                 }
             }
             else
             {
                 if (HallHeight < 0)
                 {
-                    _Halls.Add(new Rectangle(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
+                    _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
                 }
                 else if (HallHeight > 0)
                 {
-                    _Halls.Add(new Rectangle(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
+                    _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
                 }
             }
         }
@@ -248,7 +265,7 @@ namespace ConsoleDog.Map
                 int RoomWidth = _Rand.Next(7, _LeafWidth - 2); //*{}
                 int RoomPosX = _Rand.Next(1, _LeafWidth - RoomWidth - 2);
                 int RoomPosY = _Rand.Next(1, _LeafHeight - RoomHeight - 2);
-                _LeafRoom = new Rectangle(_LeafX + RoomPosX, _LeafY + RoomPosY, RoomHeight, RoomWidth);
+                _LeafRoom = new Room(_LeafX + RoomPosX, _LeafY + RoomPosY, RoomHeight, RoomWidth);
             }
         }
         public static List<Leaf> LeafsCreate(int _RootLeafX, int _RootLeafY, int _MapHeight, int _MapWidth, Random Rand) // Функция создающая лифы
@@ -299,29 +316,27 @@ namespace ConsoleDog.Map
             }
             List<Leaf> _leafs = new List<Leaf>();
             _leafs = Leaf.LeafsCreate(0, 0, _MapHeight, _MapWidth, Rand);
-            List<Rectangle> _Halls = new List<Rectangle>();
+            List<Room> _Halls = new List<Room>();
             foreach (Leaf l in _leafs)
             {
-                if (l._Halls != null)
-                {
-                    foreach (Rectangle r in l._Halls)
-                    {
-                        RectangleHallsCreate(r._RectangleX, r._RectangleY, r._RectangleHeight, r._RectangleWidth);
-
-                    }
-                }
                 if (l._LeafLeftChild == null || l._LeafRightChild == null)
                 {
-                    RectangleRoomCreate(l._LeafRoom._RectangleX, l._LeafRoom._RectangleY,
+                    RectangleCreate(l._LeafRoom._RectangleX, l._LeafRoom._RectangleY,
                     l._LeafRoom._RectangleHeight, l._LeafRoom._RectangleWidth);
-
+                }
+                if (l._Halls != null)
+                {
+                    foreach (Hall r in l._Halls)
+                    {
+                        RectangleCreate(r._RectangleX, r._RectangleY, r._RectangleHeight, r._RectangleWidth);
+                    }
                 }
 
             }
 
         }
 
-        public static void RectangleRoomCreate(int _RectanglePlacementX, int _RectanglePlacementY, int _RectangleHeight, int _RectangleWidth)
+        public static void RectangleCreate(int _RectanglePlacementX, int _RectanglePlacementY, int _RectangleHeight, int _RectangleWidth)
         {
             for (int y = _RectanglePlacementY - 1; y < _RectangleHeight + _RectanglePlacementY + 1; y++)
             {
@@ -331,28 +346,7 @@ namespace ConsoleDog.Map
                     || x == _RectanglePlacementX - 1 || x == _RectangleWidth + _RectanglePlacementX)
                     {
                         ConsoleDogMap._Cells[y, x]._IsMap = true;
-                        ConsoleDogMap._Cells[y, x]._IsWalkable = false;
-                    } //// Если добавить отрицание возможности пройти, то будет дeлать стены внутри комнат
-                    else
-                    {
-                        ConsoleDogMap._Cells[y, x]._IsMap = true;
-                        ConsoleDogMap._Cells[y, x]._IsWalkable = true;
-                    }
-                }
-            }
-        }
-        public static void RectangleHallsCreate(int _RectanglePlacementX, int _RectanglePlacementY, int _RectangleHeight, int _RectangleWidth)
-        {
-            for (int y = _RectanglePlacementY - 1; y < _RectangleHeight + _RectanglePlacementY + 1; y++)
-            {
-                for (int x = _RectanglePlacementX - 1; x < _RectangleWidth + _RectanglePlacementX + 1; x++)
-                {
-                    if ((y == _RectanglePlacementY - 1 || y == _RectangleHeight + _RectanglePlacementY
-                    || x == _RectanglePlacementX - 1 || x == _RectangleWidth + _RectanglePlacementX))
-                    {
-                        ConsoleDogMap._Cells[y, x]._IsMap = true;
-                        ConsoleDogMap._Cells[y, x]._IsWalkable = true;
-                    }
+                    } 
                     else
                     {
                         ConsoleDogMap._Cells[y, x]._IsMap = true;

@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\RectangleMap.cs" />
+    <Compile Include="Map\Map.cs" />
     <Compile Include="Person\Enemy.cs" />
     <Compile Include="Person\Logic_Enemies.cs" />
     <Compile Include="Person\Person.cs" />
