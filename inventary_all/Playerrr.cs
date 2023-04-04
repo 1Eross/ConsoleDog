@@ -6,7 +6,8 @@ using DungeonSlayer.Units;
 
 namespace pppp
 {
-    class Playerrr : Persona
+    class Playerrr : Personaaa
+    
     {
         public PlayerInventory inventory;
         public PerksSystem perksSystem;
