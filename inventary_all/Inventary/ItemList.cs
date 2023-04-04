@@ -14,20 +14,20 @@ namespace DungeonSlayer.Units.Players.Inventory
 
         static public Armor withoutArmor = new Armor("Without Armor", 0, 0, 0, 0, 0);
         static public Armor castoffs = new Armor("Сastoffs", 0, 0, 1, 0, 0);
-        static public Armor ironArmor = new Armor("Iron Armor", 4, 0, 0, 50, 2);
-        static public Armor robeStudent = new Armor("Robe Student", 0, 2, 0, 55, 3);
-        static public Armor goblinArmor = new Armor("Goblin clothes", 2, 1, 0, 60, 3);
-        static public Armor leatherArmor = new Armor("Leather Armor", 2, 1, 0, 70, 4);
-        static public Armor stealArmor = new Armor("Steal Armor", 6, 0, 0, 100, 7);
+        static public Armor ironArmor = new Armor("Iron Armor", 4, 0, 0, 20, 2);
+        static public Armor robeStudent = new Armor("Robe Student", 0, 2, 0, 30, 3);
+        static public Armor goblinArmor = new Armor("Goblin clothes", 2, 1, 0, 22, 3);
+        static public Armor leatherArmor = new Armor("Leather Armor", 2, 1, 0, 23, 4);
+        static public Armor stealArmor = new Armor("Steal Armor", 6, 0, 0, 44, 7);
 
 
-        static public Helmet withoutHelmet = new Helmet("Without Helmet", 0, 0, 0, 0, 0);
-        static public Helmet wellWornHood = new Helmet("Well-worn Hood", 0, 0, 0, 1, 0);
-        static public Helmet ironHelmet = new Helmet("Iron Helmet", 2, 0, 0, 35, 2);
+        static public Helmet withoutHelmet = new Helmet("Without Helmet", 0, 0, 0, 33, 0);
+        static public Helmet wellWornHood = new Helmet("Well-worn Hood", 0, 0, 0, 18, 0);
+        static public Helmet ironHelmet = new Helmet("Iron Helmet", 2, 0, 0, 25, 2);
 
-        static public Weapon stealSword = new Weapon("Steal Sword", 5, 90, 5, EWeaponType.SWORD, 80, 4);
-        static public Weapon stealSpear = new Weapon("Steal Spear", 4, 70, 15, EWeaponType.SPEAR, 75, 5);
-        static public Weapon stealMace = new Weapon("Steal Mace", 5, 80, 9, EWeaponType.MACE, 80, 4);
+        static public Weapon stealSword = new Weapon("Steal Sword", 5, 90, 5, EWeaponType.SWORD,0, 4);
+        static public Weapon stealSpear = new Weapon("Steal Spear", 4, 70, 15, EWeaponType.SPEAR, 44, 5);
+        static public Weapon stealMace = new Weapon("Steal Mace", 5, 80, 9, EWeaponType.MACE, 22, 4);
 
 
 
