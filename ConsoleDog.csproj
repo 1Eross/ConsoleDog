@@ -52,11 +52,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actor\Monster.cs" />
+    <Compile Include="Actor\Monsters\Kobold.cs" />
+    <Compile Include="Actor\Player.cs" />
+    <Compile Include="Colors\Colors.cs" />
+    <Compile Include="Colors\Swatch.cs" />
+    <Compile Include="Core\Direction.cs" />
+    <Compile Include="Core\Door.cs" />
+    <Compile Include="Interface\IActor.cs" />
+    <Compile Include="Interface\IDrowable.cs" />
+    <Compile Include="Map\Leaf.cs" />
     <Compile Include="Map\Map.cs" />
+    <Compile Include="Map\TypesofRooms.cs" />
     <Compile Include="MessageLog\MessageLog.cs" />
-    <Compile Include="Person\Person.cs" />
+    <Compile Include="Actor\Actor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\ComandSystem.cs" />
+    <Compile Include="System\MessageLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

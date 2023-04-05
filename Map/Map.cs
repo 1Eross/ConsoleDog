@@ -1,309 +1,51 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using RLNET;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleDog.Actor;
+using ConsoleDog.Map;
+using ConsoleDog.Actor.Monsters;
 
 namespace ConsoleDog.Map
 {
-
-    public class Cell
+    public class Map
     {
-        public int _PosX;
-        public int _PosY;
-        public bool _IsWalkable;
-        public bool _IsMap;
-        public Cell(int _PosX, int _PosY, bool _IsWalkable, bool _IsMap)
-        {
-            this._PosX = _PosX;
-            this._PosY = _PosY;
-            this._IsWalkable = _IsWalkable;
-            this._IsMap = _IsMap;
+        private static readonly int _MapHeight = 35; // Создать класс консоль и притянуть оттуда
+        private static readonly int _MapWidth = 85; // Создать класс консоль и притянуть оттуда
+        private static Cell[,] _Cells = new Cell[_MapHeight, _MapWidth]; // Точно ли статик
+        private static List<Monster> _MonsterList = new List<Monster>();
+        private static List<Leaf> _leafs = new List<Leaf>();
+        private static List<Room> _Halls = new List<Room>();
 
-        }
-    }
-    public class Room
-    {
-        public int _RectangleX;
-        public int _RectangleY;
-        public int _RectangleHeight;
-        public int _RectangleWidth;
-        public Room(int rectangleX, int rectangleY, int rectangleHeight, int rectangleWidth)
+        public Cell GetCell(int x, int y)
         {
-            this._RectangleX = rectangleX;
-            this._RectangleY = rectangleY;
-            this._RectangleHeight = rectangleHeight;
-            this._RectangleWidth = rectangleWidth;
+            return _Cells[y, x];
         }
-    }
 
-    public class Hall
-    {
-        public int _RectangleX;
-        public int _RectangleY;
-        public int _RectangleHeight;
-        public int _RectangleWidth;
-        public int _HallEnterX;
-        public int _HallEnterY;
-        public Hall(int rectangleX, int rectangleY, int rectangleHeight, int rectangleWidth)
+        private static void RectangleCreate(int _RectanglePlacementX, int _RectanglePlacementY, int _RectangleHeight, int _RectangleWidth)
         {
-            this._RectangleX = rectangleX;
-            this._RectangleY = rectangleY;
-            this._RectangleHeight = rectangleHeight;
-            this._RectangleWidth = rectangleWidth;
-        }
-    }
-
-    public class Leaf
-    {
-        public const int _MIN_LEAF_SIZE = 15; //*
-        public const int _MAX_LEAF_SIZE = 30; //*
-        public int _LeafX;
-        public int _LeafY;
-        public int _LeafHeight;
-        public int _LeafWidth;
-        public Leaf _LeafLeftChild;
-        public Leaf _LeafRightChild;
-        public Room _LeafRoom;
-        public List<Hall> _Halls;
-        Random _Rand = new Random();
-
-        public Leaf(int _LeafX, int _LeafY, int _LeafHeight, int _LeafWidth, Random Rand)
-        {
-            this._LeafX = _LeafX;
-            this._LeafY = _LeafY;
-            this._LeafHeight = _LeafHeight;
-            this._LeafWidth = _LeafWidth;
-            this._Rand = Rand;
-        }
-        public bool LeafSplit()
-        {
-            if (this._LeafRightChild != null || this._LeafLeftChild != null) // Если есть дочерний лист, то не режем
+            for (int y = _RectanglePlacementY - 1; y < _RectangleHeight + _RectanglePlacementY + 1; y++)
             {
-                return false;
-            }
-            else
-            {
-                bool SplitHeight = _Rand.NextDouble() > 0.5; // Если рандомное число больше 0.5 то 1, иначе 0
-                if (this._LeafWidth > this._LeafHeight & (double)this._LeafWidth / this._LeafHeight >= 1.25)
+                for (int x = _RectanglePlacementX - 1; x < _RectangleWidth + _RectanglePlacementX + 1; x++)
                 {
-                    SplitHeight = false;
-                }
-                if (this._LeafHeight > this._LeafWidth & (double)this._LeafHeight / this._LeafWidth >= 1.25)
-                {
-                    SplitHeight = true;
-                }
-                int MaxSplit = (SplitHeight ? _LeafHeight : _LeafWidth) - _MIN_LEAF_SIZE;
-                if (MaxSplit <= _MIN_LEAF_SIZE)
-                {
-                    return false;
-                }
-                int SplitValue = _Rand.Next(_MIN_LEAF_SIZE, MaxSplit);
-                if (SplitHeight)
-                {
-                    _LeafLeftChild = new Leaf(_LeafX, _LeafY, SplitValue, _LeafWidth, _Rand);
-                    _LeafRightChild = new Leaf(_LeafX, _LeafY + SplitValue, _LeafHeight - SplitValue, _LeafWidth, _Rand);
-                }
-                else
-                {
-                    _LeafLeftChild = new Leaf(_LeafX, _LeafY, _LeafHeight, SplitValue, _Rand);
-                    _LeafRightChild = new Leaf(_LeafX + SplitValue, _LeafY, _LeafHeight, _LeafWidth - SplitValue, _Rand);
-                }
-                return true;
-            }
-        }
-        public Room GetRoom(Random Rand)
-        {
-            if (_LeafRoom != null)
-            {
-                return _LeafRoom;
-            }
-            else
-            {
-                Room LeftRoom = null;
-                Room RightRoom = null;
-                if (_LeafLeftChild != null)
-                {
-                    LeftRoom = _LeafLeftChild.GetRoom(Rand);
-                }
-                if (_LeafRightChild != null)
-                {
-                    RightRoom = _LeafRightChild.GetRoom(Rand);
-                }
-                if (RightRoom == null && LeftRoom == null)
-                {
-                    return null;
-                }
-                else if (RightRoom == null)
-                {
-                    return LeftRoom;
-                }
-                else if (LeftRoom == null)
-                {
-                    return RightRoom;
-                }
-                else if (Rand.NextDouble() > 5)
-                {
-                    return LeftRoom;
-                }
-                else
-                {
-                    return RightRoom;
-                }
-            }
-        }
-        public void CreateHall(Room Left, Room Right, Random Rand)
-        {
-            _Halls = new List<Hall>();
-            int RoomPoint1X = Rand.Next(Left._RectangleX + 1, Left._RectangleX + Left._RectangleWidth - 2); // {?
-            int RoomPoint1Y = Rand.Next(Left._RectangleY + 1, Left._RectangleY + Left._RectangleHeight - 2);
-            int RoomPoint2X = Rand.Next(Right._RectangleX + 1, Right._RectangleX + Right._RectangleWidth - 2);
-            int RoomPoint2Y = Rand.Next(Right._RectangleY + 1, Right._RectangleY + Right._RectangleHeight - 2); // }
-            int HallWidth = RoomPoint2X - RoomPoint1X;
-            int HallHeight = RoomPoint2Y - RoomPoint1Y;
-            if (HallWidth < 0)
-            {
-                if (HallHeight < 0)
-                {
-                    if (Rand.NextDouble() > 0.5)
+                    if (y == _RectanglePlacementY - 1 || y == _RectangleHeight + _RectanglePlacementY
+                    || x == _RectanglePlacementX - 1 || x == _RectangleWidth + _RectanglePlacementX)
                     {
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
+                        Map._Cells[y, x]._IsMap = true;
                     }
                     else
                     {
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
+                        Map._Cells[y, x]._IsMap = true;
+                        Map._Cells[y, x]._IsWalkable = true;
                     }
-                }
-                else if (HallHeight > 0)
-                {
-                    if (Rand.NextDouble() > 0.5)
-                    {
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
-                    }
-                    else
-                    {
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
-                    }
-                }
-                else
-                {
-                    _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
-                }
-            }
-            else if (HallWidth > 0)
-            {
-                if (HallHeight < 0)
-                {
-                    if (Rand.NextDouble() > 0.5)
-                    {
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
-                    }
-                    else
-                    {
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
-                    }
-                }
-                else if (HallHeight > 0)
-                {
-                    if (Rand.NextDouble() > 0.5)
-                    {
-                        _Halls.Add(new Hall(RoomPoint2X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
-                    }
-                    else
-                    {
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
-                        _Halls.Add(new Hall(RoomPoint1X, RoomPoint2Y, 1, Math.Abs(HallWidth)));
-                    }
-                }
-                else
-                {
-                    _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, 1, Math.Abs(HallWidth)));
-                }
-            }
-            else
-            {
-                if (HallHeight < 0)
-                {
-                    _Halls.Add(new Hall(RoomPoint2X, RoomPoint2Y, Math.Abs(HallHeight), 1));
-                }
-                else if (HallHeight > 0)
-                {
-                    _Halls.Add(new Hall(RoomPoint1X, RoomPoint1Y, Math.Abs(HallHeight), 1));
                 }
             }
         }
-        public void CreateRoomsForLeafs(Random Rand)
-        {
-            if (_LeafLeftChild != null || _LeafRightChild != null)
-            {
-                if (_LeafLeftChild != null)
-                {
-                    _LeafLeftChild.CreateRoomsForLeafs(Rand);
-                }
-                if (_LeafRightChild != null)
-                {
-                    _LeafRightChild.CreateRoomsForLeafs(Rand);
-                }
-                if (_LeafLeftChild != null & _LeafRightChild != null)
-                {
-                    CreateHall(_LeafLeftChild.GetRoom(Rand), _LeafRightChild.GetRoom(Rand), Rand);
-                }
-            }
-            else
-            {
-                int RoomHeight = _Rand.Next(7, _LeafHeight - 2); //*{}
-                int RoomWidth = _Rand.Next(7, _LeafWidth - 2); //*{}
-                int RoomPosX = _Rand.Next(1, _LeafWidth - RoomWidth - 2);
-                int RoomPosY = _Rand.Next(1, _LeafHeight - RoomHeight - 2);
-                _LeafRoom = new Room(_LeafX + RoomPosX, _LeafY + RoomPosY, RoomHeight, RoomWidth);
-            }
-        }
-        public static List<Leaf> LeafsCreate(int _RootLeafX, int _RootLeafY, int _MapHeight, int _MapWidth, Random Rand) // Функция создающая лифы
-        {
-            List<Leaf> _leafs = new List<Leaf>();
-            Leaf Root = new Leaf(_RootLeafX, _RootLeafY, _MapHeight, _MapWidth, Rand);
-            _leafs.Add(Root);
-            bool DidSplit = true;
-            while (DidSplit)
-            {
-                DidSplit = false;
-                foreach (Leaf l in _leafs.ToArray())
-                {
-                    if (l._LeafLeftChild == null && l._LeafRightChild == null)
-                    {
-                        if (l._LeafWidth > _MAX_LEAF_SIZE || l._LeafHeight > _MAX_LEAF_SIZE || Rand.NextDouble() > 0.25)
-                        {
-                            if (l.LeafSplit()) // Что это ?
-                            {
-                                _leafs.Add(l._LeafLeftChild);
-                                _leafs.Add(l._LeafRightChild);
-                                DidSplit = true;
-                            }
-                        }
-                    }
-                }
-            }
-            Root.CreateRoomsForLeafs(Rand);
-            return _leafs;
-        }
-
-    }
-
-    public class ConsoleDogMap
-    {
-        public static readonly int _MapHeight = 35; // Создать класс консоль и притянуть оттуда
-        public static readonly int _MapWidth = 85; // Создать класс консоль и притянуть оттуда
-        public static Cell[,] _Cells = new Cell[_MapHeight, _MapWidth]; // Точно ли статик
 
         public static void MapCreation(Random Rand)
         {
@@ -311,12 +53,10 @@ namespace ConsoleDog.Map
             {
                 for (int x = 0; x < _MapWidth; x++)
                 {
-                    ConsoleDogMap._Cells[y, x] = new Cell(x, y, false, false);
+                    Map._Cells[y, x] = new Cell(x, y, false, false, true);
                 }
             }
-            List<Leaf> _leafs = new List<Leaf>();
-            _leafs = Leaf.LeafsCreate(0, 0, _MapHeight, _MapWidth, Rand);
-            List<Room> _Halls = new List<Room>();
+            _leafs = Leaf.LeafsCreate(0, 0, _MapHeight, _MapWidth);
             foreach (Leaf l in _leafs)
             {
                 if (l._LeafLeftChild == null || l._LeafRightChild == null)
@@ -333,24 +73,146 @@ namespace ConsoleDog.Map
                 }
 
             }
+/*            Map.PlacePlayer();//Написать*/
+            Map.PlaceMonsters();
 
         }
-
-        public static void RectangleCreate(int _RectanglePlacementX, int _RectanglePlacementY, int _RectangleHeight, int _RectangleWidth)
+        public static void Draw(RLConsole _MapConsole)
         {
-            for (int y = _RectanglePlacementY - 1; y < _RectangleHeight + _RectanglePlacementY + 1; y++)
+            _MapConsole.Clear();
+            foreach(Cell _Cell in _Cells)
             {
-                for (int x = _RectanglePlacementX - 1; x < _RectangleWidth + _RectanglePlacementX + 1; x++)
+                SetConsoleSymbolforCell(_MapConsole, _Cell);
+            }
+            foreach(Monster monster in _MonsterList)
+            {
+                monster.Draw(_MapConsole);
+            }
+        }
+        
+        private static void SetConsoleSymbolforCell(RLConsole _MapConsole, Cell _Cell)
+        {
+            if (_Cell._IsMap)
+            {
+                if (_Cell._IsWalkable)
                 {
-                    if (y == _RectanglePlacementY - 1 || y == _RectangleHeight + _RectanglePlacementY
-                    || x == _RectanglePlacementX - 1 || x == _RectangleWidth + _RectanglePlacementX)
+                    _MapConsole.Set(_Cell._PosX, _Cell._PosY, Colors.Colors.FloorFov, Colors.Colors.FloorBackgroundFov, '.');
+                }
+                else
+                {
+                    _MapConsole.Set(_Cell._PosX, _Cell._PosY, Colors.Colors.WallFov, Colors.Colors.WallBackgroundFov, '#');
+                }
+            }
+            /*            if (!_Cell.IsExplored) // Нет поля зрения, поэтому бесполезно
+                        {
+                            return;
+                        }
+                        if (IsInFov(_Cell._PosX, _Cell._PosY))
+                        {
+                            if (_Cell._IsWalkable)
+                            {
+                                _MapConsole.Set(_Cell._PosX, _Cell._PosY, RLColor.White, null, '.');
+                            }
+                            else
+                            {
+                                _MapConsole.Set(_Cell._PosX, _Cell._PosY, RLColor.White, null, '#');
+                            }
+                        }
+                        else
+                        {
+                            if (_Cell._IsWalkable)
+                            {
+                                _MapConsole.Set(_Cell._PosX, _Cell._PosY, RLColor.Gray, null, '.');
+                            }
+                            else
+                            {
+                                _MapConsole.Set(_Cell._PosX, _Cell._PosY, RLColor.Gray, null, '.');
+                            }
+                        }*/
+        }
+
+
+        public static bool SetActorPosition(Player person, int x, int y)
+        {
+            if (_Cells[y, x]._IsWalkable)
+            {
+                _Cells[person.Y, person.X]._IsWalkable = true;
+                person.X = x;
+                person.Y = y;
+                _Cells[person.Y, person.X]._IsWalkable = false;
+/*                if (person is Player)
+                {
+                    UpdatePlayerFov();
+                }*/
+                return true;
+            }
+            return false;
+        }
+        public static void AddMonster(Monster monster)
+        {
+            _MonsterList.Add(monster);
+            _Cells[monster.Y, monster.X]._IsWalkable = false;
+        }
+        public static void RemoveMonster(Monster monster)
+        {
+            Map._MonsterList.Remove(monster);
+            // After removing the monster from the map, make sure the cell is walkable again
+            Map._Cells[monster.Y, monster.X]._IsWalkable = true;
+        }
+
+        public static Monster GetMonsterAt(int x, int y)
+        {
+            return Map._MonsterList.FirstOrDefault(m => m.X == x && m.Y == y); //???
+        }
+
+        public static Point GetRandomWalkableLocationOfRoom(Room room) 
+        {
+            if (DoesRoomHaveWalkableSpace(room))
+            {
+                int x = Program.Rand.Next(room._RectangleX, room._RectangleX + room._RectangleWidth);
+                int y = Program.Rand.Next(room._RectangleY, room._RectangleY + room._RectangleHeight);
+                if (_Cells[y, x]._IsWalkable)
+                {
+                    return new Point(x,y);
+                }
+
+            }
+            return null;
+        }
+        public static bool DoesRoomHaveWalkableSpace(Room room)
+        {
+            for(int y = room._RectangleY; y < room._RectangleHeight + room._RectangleY; y++)
+            {
+                for (int x = room._RectangleX; y < room._RectangleWidth + room._RectangleX; x++)
+                {
+                    if (_Cells[y, x]._IsWalkable)
                     {
-                        ConsoleDogMap._Cells[y, x]._IsMap = true;
-                    } 
-                    else
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        private static void PlaceMonsters()
+        {
+            foreach (Leaf leaf in _leafs)
+            {
+                if(leaf._LeafRoom != null)
+                {
+                    if(Program.Rand.NextDouble() > 0.5)
                     {
-                        ConsoleDogMap._Cells[y, x]._IsMap = true;
-                        ConsoleDogMap._Cells[y, x]._IsWalkable = true;
+                        var numberOfMonsters = Program.Rand.Next(2,6);
+                        for(int i = 0; i < numberOfMonsters; i++)
+                        {
+                            Point randomLocation = Map.GetRandomWalkableLocationOfRoom(leaf._LeafRoom);
+                            if (randomLocation != null)
+                            {
+                                var monster = Kobold.Create(1);
+                                monster.X = randomLocation.x;
+                                monster.Y = randomLocation.y;
+                                Map.AddMonster(monster);
+                            }
+                        }
                     }
                 }
             }
